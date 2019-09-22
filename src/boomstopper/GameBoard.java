@@ -12,11 +12,16 @@ public class GameBoard {
     private GameSquare[][] grid;
     
     public GameBoard() {
-        height = 8;
-        width = 8;
-        mineCount = 10;
+        this(8, 8, 10);
+    }
+    
+    public GameBoard(int height, int width, int mineCount) {
+        this.height = height;
+        this.width = width;
+        this.mineCount = mineCount;
         
-        //Put in new method or other DRY solution
+        //Add code to protect against bad inputs
+        
         Random r = new Random();
         grid = new GameSquare[height][width];
         
@@ -24,6 +29,7 @@ public class GameBoard {
         int totalSquares = height * width;
         boolean isMine = false;
         
+        //Sets the mines
         //probability of mine is mineCount/totalSquares
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -33,15 +39,16 @@ public class GameBoard {
                         minesLeft--;
                     }
                 }
-                grid[j][i] = new GameSquare(j, i, isMine); //swap i and j
+                grid[i][j] = new GameSquare(i, j, isMine);
                 isMine = false;
             }
         }
         
-        int mineCount = 0;
+        //Calculates # of neighbor mines
+        int neighborMines = 0;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (!grid[j][i].mine) {
+                if (!grid[i][j].isMine()) {
 //                    if (i == 0) {
 //                        if (j == 0) {
 //                            if (grid[0][0].mine) {
@@ -58,14 +65,14 @@ public class GameBoard {
 
 //                  general condition  
                     for (int k = i-1; k <= i + 1; k++) {
-                        for (int l = j-1; l <= j + 1; k++) {
-                            if (grid[l][k].mine) {
-                                mineCount++;
+                        for (int l = j-1; l <= j + 1; l++) {
+                            if (grid[k][l].isMine()) {
+                                neighborMines++;
                             }
-                            grid[j][i].neighborMines = mineCount;
                         }
                     }
-                    mineCount = 0;
+                    grid[k][l].setNeighborMines(mineCount);
+                    neighborMines = 0;
                     
                     //1st row: look at i & i + 1
                     //middle rows: look at i - 1, i, i + 1
@@ -76,15 +83,5 @@ public class GameBoard {
                 }
             }
         }
-    }
-
-    //Calculating # of neighbor mines
-    
-    public GameBoard(int height, int width, int mineCount) {
-        this.height = height;
-        this.width = width;
-        this.mineCount = mineCount;
-        
-        //protect against bad inputs
     }
 }

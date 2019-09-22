@@ -4,13 +4,27 @@
 package boomstopper;
 
 public class GameSquare {
-    boolean visible;
-    boolean mine;
-    int neighborMines;
-    int x;
-    int y;
+    private boolean visible;
+    private boolean mine;
+    private int neighborMines;
+    private int row;
+    private int column;
     
-    public GameSquare(int x, int y, boolean mine) {
-        
+    public GameSquare(int row, int column, boolean mine) {
+        this.row = row;
+        this.column = column;
+        this.mine = mine;
+    }
+    
+    public void setNeighborMines(int neighborMines) {
+        this.neighborMines = neighborMines;
+    }
+    
+    public int getNeighborMines() {
+        return neighborMines;
+    }
+    
+    public boolean isMine() {
+        return this.mine;
     }
 }
