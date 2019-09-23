@@ -16,16 +16,22 @@ public class GameBoard {
     }
     
     public GameBoard(int height, int width, int mineCount) {
+        if (height < 1) {
+            throw new IllegalArgumentException("height must be greater than 0.");
+        } else if (width < 1) {
+            throw new IllegalArgumentException("width must be greater than 0.");
+        } else if (mineCount < 0) {
+            throw new IllegalArgumentException("mineCount cannot be less than 0.");
+        }
+                
         this.height = height;
         this.width = width;
         this.mineCount = mineCount;
         
-        //Add code to protect against bad inputs
-        
         Random r = new Random();
         grid = new GameSquare[height][width];
         
-        int minesLeft = mineCount; //decreases for each mine
+        int minesLeft = mineCount; //will decrease for each mine laid
         int totalSquares = height * width;
         boolean isMine = false;
         
@@ -46,40 +52,23 @@ public class GameBoard {
         
         //Calculates # of neighbor mines
         int neighborMines = 0;
+        //Loops through all the GameSquares in the GameBoard
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (!grid[i][j].isMine()) {
-//                    if (i == 0) {
-//                        if (j == 0) {
-//                            if (grid[0][0].mine) {
-//                                mineCount++;
-//                            }
-//                            if (grid[0][0].mine) {
-//                                mineCount++;
-//                            }
-//                            if (grid[0][0].mine) {
-//                                mineCount++;
-//                            }
-//                        }
-//                    }
-
-//                  general condition  
+                    //Loops through the 3 x 3 grid around non-mine squares
                     for (int k = i-1; k <= i + 1; k++) {
                         for (int l = j-1; l <= j + 1; l++) {
-                            if (grid[k][l].isMine()) {
-                                neighborMines++;
+                            //Keeps the program from checking spaces that are off the GameBoard
+                            if (k >= 0 && l >= 0 && k < height && l < width) {
+                                if (grid[k][l].isMine()) {
+                                    neighborMines++;
+                                }
                             }
                         }
                     }
-                    grid[k][l].setNeighborMines(mineCount);
+                    grid[i][j].setNeighborMines(neighborMines);
                     neighborMines = 0;
-                    
-                    //1st row: look at i & i + 1
-                    //middle rows: look at i - 1, i, i + 1
-                    //last row: i - 1, i
-                    //1st column: look at j & j + 1
-                    //middle columns: look at j - 1, j, j + 1
-                    //last row: j - 1, j
                 }
             }
         }

@@ -11,6 +11,12 @@ public class GameSquare {
     private int column;
     
     public GameSquare(int row, int column, boolean mine) {
+        if (row < 0) {
+            throw new IllegalArgumentException("row must be non-negative.");
+        } else if (column < 0) {
+            throw new IllegalArgumentException("column must be non-negative.");
+        }
+        
         this.row = row;
         this.column = column;
         this.mine = mine;
