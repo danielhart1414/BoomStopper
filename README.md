@@ -1,2 +1,2 @@
 # BoomStopper
-This is my attempt at building a game like Minesweeper. At this time, I am only writing back-end logic for the game.
+This is my attempt at building a game like Minesweeper. Code to set up the GameBoard is finished. Now the app needs a display and interactivity.
